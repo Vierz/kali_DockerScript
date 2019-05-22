@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# AGREGAR EL NOMBRE DE LA IMAGEN
+KALI_IMG=kali
+
+if [ "$1" == "run" ]
+    then
+      if [ "$2" == "bridge" ]
+        then
+          docker run -it --net=bridge $KALI_IMG /bin/bash
+        else
+          docker run -it --net=host $KALI_IMG /bin/bash
+        fi
+      elif [ "$1" == "commit" ]
+        then
+            PS=$(docker ps -all | grep $KALI_IMG | awk '{print $1}' | cut -c-4)
+            docker commit $PS $KALI_IMG:latest
+      else
+        printf "How to use it:\n"
+        printf "     Command: kali [OPTION] [NETWORK] \n"
+        printf "                 Options: \n"
+        printf "                       run    - Runs Kali container\n"
+        printf "                       commit - Commit container changes in Kali image\n"
+        printf "                 Networks: \n"
+        printf "                       host    - Default Network if not defined\n"
+        printf "                       bridge  - Bridge Network\n"
+fi
+
+
+#docker run -it --net=host kali /bin/bash
+#docker ps -all | grep kali | awk '{print $1}' | cut -c-4
+#docker commit 7071 kali:latest
